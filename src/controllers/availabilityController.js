@@ -9,7 +9,7 @@ const getAvailability = async(req,res,next)=>{
         res.json(avail||{seatsAvailable: 0});
     } catch (err){next(err);}
 };
-const seedAvailabiltyForTrainDate = async(req,res,next) =>{
+const seedAvailabilityForTrainDate = async(req,res,next) =>{
     try{
         const {trainId,date} =req.body;
         if(!trainId||!date) return res.status(400).json({message:"Train Id & Date required"});
@@ -26,5 +26,5 @@ const seedAvailabiltyForTrainDate = async(req,res,next) =>{
         res.json({message:"Seeded Availability"});
     } catch(err) {next(err);}
 };
-module.exports={getAvailability,seedAvailabiltyForTrainDate};
+module.exports={getAvailability,seedAvailabilityForTrainDate};
 
