@@ -4,7 +4,7 @@ const BookingSchema = new mongoose.Schema({
     pnr:{type:String,required:true,unique:true},
     idempotencyKey:{type:String,index:true},
     userId:{type:mongoose.Schema.Types.ObjectId,ref:"User",required:true},
-    TrainId:{type:mongoose.Schema.Types.ObjectId,ref:"Train",required:true},
+    trainId:{type:mongoose.Schema.Types.ObjectId,ref:"Train",required:true},
     date:{type:String,required:true},
     class:{type:String,required:true},
     passengers:[{name:String,age:Number,gender:String}],

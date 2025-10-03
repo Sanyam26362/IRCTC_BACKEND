@@ -8,6 +8,7 @@ const Availability = require("../models/Availability");
 (async function seed() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
+    console.log(" MongoDB connected");
 
     console.log("Clearing old data...");
     await Train.deleteMany({});
@@ -16,10 +17,10 @@ const Availability = require("../models/Availability");
 
     console.log("Creating admin user...");
     const salt = await bcrypt.genSalt(10);
-    const admin = await User.create({
+    await User.create({
       name: "Sanyam",
       email: "sanyam2410147@akgec.ac.in",
-      passwordHash: await bcrypt.hash("adminpass", salt),
+      passwordHash: await bcrypt.hash("adminpass", salt),  
       role: "admin"
     });
 
@@ -51,25 +52,34 @@ const Availability = require("../models/Availability");
 
     console.log("Seeding availability for next 7 days for each train/class...");
     const trainsDb = await Train.find({});
-    const dates = [];
     const today = new Date();
-    for (let i=0;i<7;i++){
+    const dates = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(today);
       d.setDate(today.getDate() + i);
-      dates.push(d.toISOString().slice(0,10)); // YYYY-MM-DD
-    }
+      return d.toISOString().split("T")[0];
+    });
+
+    const availabilityDocs = [];
     for (const t of trainsDb) {
       for (const date of dates) {
         for (const cls of t.classes) {
-          await Availability.create({ trainId: t._id, date, class: cls, seatsAvailable: t.totalSeats[cls] || 0 });
+          availabilityDocs.push({
+            trainId: t._id,
+            date,
+            class: cls,
+            seatsAvailable: t.totalSeats[cls] || 0
+          });
         }
       }
     }
+    await Availability.insertMany(availabilityDocs);
 
-    console.log("Seed complete. Sanyam login: sanyam2410147@akgec.ac.in / adminpass");
+    console.log(" Seed complete.");
+    console.log(" Login with: sanyam2410147@akgec.ac.in / adminpass");
+
     process.exit(0);
   } catch (err) {
-    console.error(err);
+    console.error(" Seed error", err);
     process.exit(1);
   }
 })();

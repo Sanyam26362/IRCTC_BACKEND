@@ -5,5 +5,5 @@ const AvailSchema = new mongoose.Schema({
     class:{type:String,required:true},
     seatsAvailable:{type:Number,required:true}
 },{timestamps:true});
-AvailSchema.index=({trainId:1,date:1,class:1},{unique:true});
+AvailSchema.index({trainId:1,date:1,class:1},{unique:true});
 module.exports=mongoose.model("Availability",AvailSchema);

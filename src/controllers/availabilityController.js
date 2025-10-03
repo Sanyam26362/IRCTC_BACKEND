@@ -26,5 +26,5 @@ const seedAvailabilityForTrainDate = async(req,res,next) =>{
         res.json({message:"Seeded Availability"});
     } catch(err) {next(err);}
 };
-module.exports={getAvailability,seedAvailabilityForTrainDate};
+module.exports={getAvailability,seedAvailabilityForTrainDate}
 

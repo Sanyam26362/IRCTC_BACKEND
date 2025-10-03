@@ -21,6 +21,11 @@ const login = async(req,res,next) =>{
         if(!email||!password)return res.status(400).json({message:"Missing fields"});
         const user = await User.findOne({email});
         if(!user) return res.status(400).json({message:"Invalid Credentials"});
+        
+      
+        const isMatch = await bcrypt.compare(password, user.passwordHash);
+        if(!isMatch) return res.status(400).json({message:"Invalid Credentials"});
+        
         const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:"12h"});
         res.json({token,user:{id:user._id,name:user.name,email:user.email}});
     } catch(err){next(err);}

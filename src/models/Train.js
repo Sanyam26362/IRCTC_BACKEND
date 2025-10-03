@@ -13,5 +13,5 @@ const TrainSchema = new mongoose.Schema({
     classes:[String],
     totalSeats:mongoose.Schema.Types.Mixed
 },{timestamps:true});
-TrainSchema.index({"route.StationCode":1});
+TrainSchema.index({"route.stationCode":1});
 module.exports = mongoose.model("Train",TrainSchema);

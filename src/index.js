@@ -3,16 +3,22 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
-const connectDB = require("./config/db");
+
+
+const connectDB = require("./config/db"); 
+
 const authRoutes = require("./routes/auth");
 const trainRoutes = require("./routes/trains");
 const availRoutes = require("./routes/availability");
-const bookingRoutes = require("./routes/booking");
+
+const bookingRoutes = require("./routes/booking"); 
+
 const {errorHandler} = require("./middlewares/errorHandler");
+const { configDotenv } = require("dotenv");
 
 const app = express();
-connectDB();
-
+connectDB(); 
+configDotenv()
 app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
@@ -25,5 +31,12 @@ app.use("/api/bookings", bookingRoutes);
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
+const PORT = process.env.PORT||3000;
+const server = app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
+
+
+server.on('error', (err) => {
+    console.error(" Fatal Server Startup Error:", err.message);
+    process.exit(1);
+});
+
