@@ -1,4 +1,4 @@
-require("dotenv").config();
+const dotenv= require("dotenv");
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
@@ -15,7 +15,9 @@ const bookingRoutes = require("./routes/booking");
 
 const {errorHandler} = require("./middlewares/errorHandler");
 const { configDotenv } = require("dotenv");
-
+dotenv.config({
+    path:"../.env"
+})
 const app = express();
 connectDB(); 
 configDotenv()
@@ -31,7 +33,7 @@ app.use("/api/bookings", bookingRoutes);
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT||3000;
+const PORT = 3000;
 const server = app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
 
 
